@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="<?php language_attributes(); ?>">
-    
+
 <head>
 
     <meta charset="<?php bloginfo('charset'); ?>">
@@ -16,5 +16,6 @@
     
 <header>
 
+ <?php get_template_part('template-parts/header/nav'); ?>
 
 </header>
