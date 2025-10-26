@@ -12,7 +12,7 @@ function register_styles(){
 
     // Responsive CSS
 
-    wp_enqueue_style('theme-style', get_template_directory_uri() . '/assets/css/responsive.css');
+    wp_enqueue_style('responsive', get_template_directory_uri() . '/assets/css/responsive.css');
 
     // Slick Slider CSS
     wp_enqueue_style('slick-css', 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css', array(), '1.9.0');
