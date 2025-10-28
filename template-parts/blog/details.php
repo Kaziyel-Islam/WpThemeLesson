@@ -77,7 +77,7 @@
 
                 <!----- Comment Form ----->
 
-                <?php get_template_part('template-parts/blog/comment-form'); ?>
+                <?php get_template_part('template-parts/blog/comment_form'); ?>
 
                 <?php endwhile; endif; ?>
 
