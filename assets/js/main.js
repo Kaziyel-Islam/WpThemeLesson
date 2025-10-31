@@ -61,3 +61,31 @@ jQuery().ready(function($){
     ]
     });
 });
+
+
+
+// single course tab
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  const tabLinks = document.querySelectorAll('.tab-link');
+  const tabPanes = document.querySelectorAll('.tab-pane');
+  
+  tabLinks.forEach(function(tabLink) {
+    tabLink.addEventListener('click', function() {
+        
+      // Remove active class from all tabs and panes
+      tabLinks.forEach(function(link) {
+        link.classList.remove('active');
+      });
+      tabPanes.forEach(function(pane) {
+        pane.classList.remove('active');
+      });
+      
+      // Add active class to clicked tab and corresponding pane
+      this.classList.add('active');
+      const tabId = this.getAttribute('data-tab');
+      document.getElementById(tabId).classList.add('active');
+    });
+  });
+});
