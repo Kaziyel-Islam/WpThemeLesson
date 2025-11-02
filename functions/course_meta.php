@@ -1,19 +1,40 @@
-<?php
 
+<?php 
 
-// Meta Box Class: Extra Filed
-class extrafiledMetabox {
+// Meta Box Class: Course Details
+class coursedetailsMetabox {
 
 	private $screen = array(
-		
-		'course'
+		'post',
+		'page',
+		'course',
 	);
 
 	private $meta_fields = array(
 		array(
-			'label' => 'Price',
-			'id' => '_cprice',
+			'label' => 'Regular Price',
+			'id' => '_rprice',
+			'type' => 'number',
+		),
+		array(
+			'label' => 'Discount Price',
+			'id' => '_dprice',
+			'type' => 'number',
+		),
+		array(
+			'label' => 'Duration',
+			'id' => '_duration',
 			'type' => 'text',
+		),
+		array(
+			'label' => 'Language ',
+			'id' => '_clanguage',
+			'type' => 'text',
+		),
+		array(
+			'label' => 'Overview',
+			'id' => '_overview',
+			'type' => 'textarea',
 		),
 	);
 
@@ -25,18 +46,18 @@ class extrafiledMetabox {
 	public function add_meta_boxes() {
 		foreach ( $this->screen as $single_screen ) {
 			add_meta_box(
-				'extrafiled',
-				__( 'Extra Filed', 'lmslesson' ),
+				'coursedetails',
+				__( 'Course Details', 'lessonlms' ),
 				array( $this, 'meta_box_callback' ),
 				$single_screen,
-				'advanced',
+				'normal',
 				'default'
 			);
 		}
 	}
 
 	public function meta_box_callback( $post ) {
-		wp_nonce_field( 'extrafiled_data', 'extrafiled_nonce' );
+		wp_nonce_field( 'coursedetails_data', 'coursedetails_nonce' );
 		$this->field_generator( $post );
 	}
 
@@ -51,6 +72,14 @@ class extrafiledMetabox {
 				}
 			}
 			switch ( $meta_field['type'] ) {
+				case 'textarea':
+					$input = sprintf(
+						'<textarea style="width: 100%%" id="%s" name="%s" rows="5">%s</textarea>',
+						$meta_field['id'],
+						$meta_field['id'],
+						$meta_value
+					);
+					break;
 				default:
 					$input = sprintf(
 						'<input %s id="%s" name="%s" type="%s" value="%s">',
@@ -71,10 +100,10 @@ class extrafiledMetabox {
 	}
 
 	public function save_fields( $post_id ) {
-		if ( ! isset( $_POST['extrafiled_nonce'] ) )
+		if ( ! isset( $_POST['coursedetails_nonce'] ) )
 			return $post_id;
-		$nonce = $_POST['extrafiled_nonce'];
-		if ( !wp_verify_nonce( $nonce, 'extrafiled_data' ) )
+		$nonce = $_POST['coursedetails_nonce'];
+		if ( !wp_verify_nonce( $nonce, 'coursedetails_data' ) )
 			return $post_id;
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
 			return $post_id;
@@ -96,6 +125,6 @@ class extrafiledMetabox {
 	}
 }
 
-if (class_exists('extrafiledMetabox')) {
-	new extrafiledMetabox;
+if (class_exists('coursedetailsMetabox')) {
+	new coursedetailsMetabox;
 };

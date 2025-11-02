@@ -1,13 +1,13 @@
 
 
 <?php 
-// $price = get_post_meta(get_the_ID(), 'price', true) ? : '0.00'; 
-// $original_price = get_post_meta(get_the_ID(), 'original_price', true) ? : '0:00'; 
+$R_price = get_post_meta(get_the_ID(), '_rprice', true) ? : '0.00'; 
+$D_price = get_post_meta(get_the_ID(), '_dprice', true) ? : '0:00'; 
 
-// $discount = '';
-// if(!empty($original_price) && $original_price > $price){
-//     $discount = round((($original_price - $price)/$original_price)*100);
-// }
+$discount = '';
+if(!empty($D_price) && $R_price > $D_price){
+    $discount = round((($R_price - $D_price)/$D_price)*100);
+}
 ?>
 
 <section class="single-course-wrapper">
@@ -50,9 +50,9 @@
 
           <!-- Floating Price Card -->
           <div class="price-card">
-            <h3>$</h3>
-            <div class="original-price">$220</div>
-            <div class="discount-badge">10% OFF</div>
+            <h3><?php echo esc_html($D_price); ?>$</h3>
+            <div class="original-price"><?php echo esc_html($R_price); ?></div>
+            <div class="discount-badge"><?php echo esc_html($discount); ?>% OFF</div>
             <button class="enroll-btn">Enroll Now</button>
 
             <div class="includes">
@@ -81,7 +81,7 @@
           <div class="tab-content">
             <div id="overview" class="tab-pane active">
               <div class="course-description">
-                <p>Get the best course, gain knowledge and shine for your future career.</p>
+                <p><?php echo get_post_meta(get_the_ID(), '_overview', true) ?></p>
                 
               </div>
             </div>
@@ -109,9 +109,9 @@
         <!-- Course Details Card -->
         <div class="course-details">
           <h3>Course Details</h3>
-          <p><i class="fas fa-clock icon"></i> Duration<br><strong>42 hours</strong></p>
+          <p><i class="fas fa-clock icon"></i> Duration<br><strong><?php echo get_post_meta(get_the_ID(), '_duration', true) ?> hours</strong></p>
           <p><i class="fas fa-calendar icon"></i> Last Updated<br><strong>June 15, 2023</strong></p>
-          <p><i class="fas fa-language icon"></i> Language<br><strong>English</strong></p>
+          <p><i class="fas fa-language icon"></i> Language<br><strong><?php echo get_post_meta(get_the_ID(), '_clanguage', true) ?></strong></p>
           <p><i class="fas fa-closed-captioning icon"></i> Subtitles<br><strong>English, Spanish</strong></p>
         </div>
         
