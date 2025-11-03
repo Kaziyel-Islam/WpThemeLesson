@@ -1,8 +1,12 @@
 
 
 <?php 
+
+
 $R_price = get_post_meta(get_the_ID(), '_rprice', true) ? : '0.00'; 
 $D_price = get_post_meta(get_the_ID(), '_dprice', true) ? : '0:00'; 
+
+
 
 $discount = '';
 if(!empty($D_price) && $R_price > $D_price){
@@ -20,13 +24,24 @@ if(!empty($D_price) && $R_price > $D_price){
       <div class="course-meta">
         <div class="rating">
           <div class="stars">
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star-half-alt"></i>
-          </div>
-          <span>4.8 (1,245 reviews)</span>
+            <?php 
+              $stats = lessonlms_get_reviews_stats(get_the_ID());
+              $avg_rating = $stats['average_rating'];
+              $total_reviews = $stats['total_reviews'];          
+              ?>
+
+              <?php for($i=1 ; $i <= 5; $i++): ?>
+              <?php if($i <= $avg_rating) : ?>
+                <i class="fas fa-star"></i>
+              <?php elseif( $i - 0.5 <= $avg_rating) : ?>
+                <i class="fas fa-star-half-alt"></i>
+              <?php else : ?>
+                <i class="fa-thin fa-star"></i>          
+                <?php endif; ?>
+                <?php endfor; ?>
+            </div>
+
+              <span><?php echo esc_html($avg_rating); ?> (<?php echo esc_html($total_reviews); ?> reviews)</span>
         </div>
         <div class="enrolled">
           <i class="fas fa-users"></i>
@@ -99,6 +114,72 @@ if(!empty($D_price) && $R_price > $D_price){
             <div id="reviews" class="tab-pane">
               <h3>Student Reviews</h3>
               <p>Reviews will be displayed here.</p>
+              <form method="post">
+                  <input type="hidden" name="course_id" value="<?php echo get_the_ID(); ?>">
+                  <!-- Ratings -->
+                  <label for="rating">Your Rating:</label>
+                  <div class="star-rating" id="starRating">
+                    <div class="form-group">
+                      <input type="radio" id="star5" name="rating" value="5" required>
+                      <label for="star5">★</label>
+
+                      <input type="radio" id="star4" name="rating" value="4">
+                      <label for="star4">★</label>
+
+                      <input type="radio" id="star3" name="rating" value="3">
+                      <label for="star3">★</label>
+
+                      <input type="radio" id="star2" name="rating" value="2">
+                      <label for="star2">★</label>
+
+                      <input type="radio" id="star1" name="rating" value="1">
+                      <label for="star1">★</label>
+                    </div>
+                  </div>
+
+                  <div class="input-group">
+                    <label for="reviewer_name">Your Name:</label>
+                    <input type="text" id="reviewer_name" name="reviewer_name" placeholder="Enter your name" required />
+                  </div>
+
+                  <div class="input-group">
+                    <label for="review_text">Your Review:</label>
+                    <textarea id="review_text" name="review_text" placeholder="Write your thoughts here..." required></textarea>
+                  </div>
+
+                  <button type="submit" name="submit_review" value="1" class="submit-btn">Submit Review</button>
+              </form>
+
+              <div class="reviews-list">
+                <?php 
+
+                $reviews = lessonlms_get_course_reviews(get_the_ID());
+
+                if ($reviews): ?>
+                  <?php foreach (array_reverse($reviews) as $review): ?>
+                    <div class="review-item">
+                      <div class="review-header">
+                        <span class="reviewer-name"><?php echo esc_html($review['name']); ?></span>
+                        <div class="review-stars">
+                          <?php for ($i = 1; $i <= 5; $i++): ?>
+                            <?php if ($i <= $review['rating']): ?>
+                              <span class="star filled">★</span>
+                            <?php else: ?>
+                              <span class="star empty">★</span>
+                            <?php endif; ?>
+                          <?php endfor; ?>
+                        </div>
+                      </div>
+                      <p class="review-text"><?php echo esc_html($review['review']) ?></p>
+                      <time class="review-date" datetime="<?php echo esc_attr($review['date']); ?>">
+                        <?php echo date('F j, Y', strtotime($review['date'])); ?>
+                      </time>
+                    </div>
+                  <?php endforeach; ?>
+                <?php else: ?>
+                  <p>No Review yet.</p>
+                <?php endif; ?>    
+            </div>
             </div>
           </div>
         </div>
