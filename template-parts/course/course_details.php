@@ -12,6 +12,9 @@ $discount = '';
 if(!empty($D_price) && $R_price > $D_price){
     $discount = round((($R_price - $D_price)/$D_price)*100);
 }
+
+$enrolled_students = get_post_meta(get_the_ID(), '_enrolled_students', true) ?: 0;
+$current_user_id = get_current_user_id();
 ?>
 
 <section class="single-course-wrapper">
@@ -31,9 +34,9 @@ if(!empty($D_price) && $R_price > $D_price){
               ?>
 
               <?php for($i=1 ; $i <= 5; $i++): ?>
-              <?php if($i <= $avg_rating) : ?>
-                <i class="fas fa-star"></i>
-              <?php elseif( $i - 0.5 <= $avg_rating) : ?>
+              <?php if($avg_rating >= $i) : ?>
+                 <i class="fas fa-star"></i>
+              <?php elseif($avg_rating >= ($i - 0.75)) : ?>
                 <i class="fas fa-star-half-alt"></i>
               <?php else : ?>
                 <i class="fa-thin fa-star"></i>          
@@ -45,7 +48,7 @@ if(!empty($D_price) && $R_price > $D_price){
         </div>
         <div class="enrolled">
           <i class="fas fa-users"></i>
-          <span>3,450 students enrolled</span>
+          <span><?php echo esc_html($enrolled_students); ?> students enrolled</span>
         </div>
       </div>
     </div>
@@ -68,7 +71,21 @@ if(!empty($D_price) && $R_price > $D_price){
             <h3><?php echo esc_html($D_price); ?>$</h3>
             <div class="original-price"><?php echo esc_html($R_price); ?></div>
             <div class="discount-badge"><?php echo esc_html($discount); ?>% OFF</div>
-            <button class="enroll-btn">Enroll Now</button>
+
+            <?php if ($current_user_id > 0) : ?>
+
+             <button class="enroll-btn" data-course-id="<?php echo get_the_ID(); ?>">Enroll Now</button>
+
+              <?php else : ?>
+                <div class="login-required">
+                  <p>Please Login or Register to enroll</p>
+                  <div class="enrl-button">
+                  <a class="" href="<?php echo wp_login_url(get_permalink()); ?>" class="login-btn">Login</a>
+                  <a class="" href="<?php echo wp_registration_url(get_permalink()); ?>" class="register-btn">Register</a>
+
+                  </div>
+                </div>
+              <?php endif; ?>
 
             <div class="includes">
               <h4>This course includes:</h4>
