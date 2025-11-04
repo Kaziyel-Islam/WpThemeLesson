@@ -13,8 +13,25 @@ if(!empty($D_price) && $R_price > $D_price){
     $discount = round((($R_price - $D_price)/$D_price)*100);
 }
 
-$enrolled_students = get_post_meta(get_the_ID(), '_enrolled_students', true) ?: 0;
+$course_id = get_the_ID();
 $current_user_id = get_current_user_id();
+$enrolled_students = get_post_meta(get_the_ID(), '_enrolled_students', true) ?: 0;
+
+$is_enrolled = false;
+
+if ($current_user_id) {
+    $user_enrollments = get_user_meta($current_user_id, '_user_enrollments', true);
+    if (is_array($user_enrollments)) {
+        foreach ($user_enrollments as $enrolled) {
+            if (!empty($enrolled['course_id']) && intval($enrolled['course_id']) === $course_id) {
+                $is_enrolled = true;
+                break;
+            }
+        }
+    }
+}
+?>
+
 ?>
 
 <section class="single-course-wrapper">
@@ -74,7 +91,9 @@ $current_user_id = get_current_user_id();
 
             <?php if ($current_user_id > 0) : ?>
 
-             <button class="enroll-btn" data-course-id="<?php echo get_the_ID(); ?>">Enroll Now</button>
+             <button class="enroll-btn" data-course-id="<?php echo get_the_ID(); ?>" <?php echo $is_enrolled ? 'disabled' : ''; ?>>
+                <?php echo $is_enrolled ? 'Enrolled' : 'Enroll Now'; ?>
+             </button>
 
               <?php else : ?>
                 <div class="login-required">

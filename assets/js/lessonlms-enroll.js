@@ -19,7 +19,7 @@ jQuery(document).ready(function($) {
       success: function(response) {
         if (response.success) {
           enrolledElement.text(response.data + ' enrolled students');
-          button.text('Enrolled');
+          button.text('Enrolled').prop('disabled', true);
           alert('🎉 Enrolled successfully!');
         } else {
           if (response.data === 'Please Login to Enroll') {

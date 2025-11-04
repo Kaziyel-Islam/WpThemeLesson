@@ -691,6 +691,10 @@ nav.main-menu-phone ul {
   background: #e67e22;
 }
 
+.enroll-btn[disabled]{
+    background: #e67e22;
+}
+
 .includes h4 {
   margin: 15px 0 10px;
   font-size: 14px;
